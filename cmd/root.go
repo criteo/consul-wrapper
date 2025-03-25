@@ -1,6 +1,7 @@
 package cmd
 
 import (
+	"os"
 	"runtime"
 	"time"
 
@@ -13,9 +14,11 @@ var token string
 var service string
 var frequency time.Duration
 var port int
+var consulAddr string
 
 func init() {
 	RootCmd.PersistentFlags().StringVarP(&token, "token", "t", "", "Consul token used for registration")
+	RootCmd.PersistentFlags().StringVarP(&consulAddr, "consul-addr", "c", os.Getenv("CONSUL_HTTP_ADDR"), "Consul HTTP address")
 	RootCmd.Flags().StringVarP(&service, "service", "s", "", "Consul Service Name")
 	RootCmd.Flags().IntVarP(&port, "port", "p", 0, "Service port")
 	RootCmd.PersistentFlags().DurationVarP(&frequency, "frequency", "f", 30*time.Second, "Health Check Frequency (in seconds)")
@@ -34,6 +37,7 @@ var RootCmd = &cobra.Command{
 		}
 		runner.Run(runner.Config{
 			ConsulToken:        token,
+			ConsulAddr:         consulAddr,
 			CommandLine:        []string{shell, shellFlag, args[0]},
 			SelfCheckFrequency: frequency,
 			Definition: &api.AgentServiceRegistration{
