@@ -67,7 +67,7 @@ func Run(config Config) {
 		DeregisterCriticalServiceAfter: fmt.Sprintf("%d", int64(2.1*config.SelfCheckFrequency.Seconds())) + "s",
 		TTL:                            fmt.Sprintf("%d", int64(3.1*config.SelfCheckFrequency.Seconds())) + "s",
 	})
-	consulClient := getConsulClient("localhost:8500", config.ConsulToken)
+	consulClient := getConsulClient(config.ConsulAddr, config.ConsulToken)
 	registerConsulService(config, consulClient)
 
 	cmd := exec.Command(config.CommandLine[0], config.CommandLine[1:]...)

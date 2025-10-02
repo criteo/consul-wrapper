@@ -7,6 +7,7 @@ import (
 )
 
 type Config struct {
+	ConsulAddr         string
 	ConsulToken        string
 	CommandLine        []string
 	Definition         *api.AgentServiceRegistration
